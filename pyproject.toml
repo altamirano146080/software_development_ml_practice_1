@@ -27,6 +27,7 @@ dependencies = [
     "notebook",
     "numpy",
     "pandas",
+    "pyarrow",
     "pip",
     "python-dotenv",
     "scikit-learn",
