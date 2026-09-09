@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "black",
     "flake8",
+    "huggingface-hub",
     "ipython",
     "isort",
     "jupyterlab",
