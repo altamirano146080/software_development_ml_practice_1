@@ -22,18 +22,27 @@ dependencies = [
     "isort",
     "jupyterlab",
     "loguru",
-    "matplotlib",
+    "lightning>=2.5.2",
+    "matplotlib>=3.10.6",
+    "numba>=0.61.2",
+    "numpy<2",
+    "pandas>=2.3.2",
+    "pyarrow>=21.0.0",
+    "seaborn>=0.13.2",
+    "tables>=3.10.2",
+    "tensorboard>=2.18.0",
+    "tensorflow==2.12.*",
+    "torch>=2.7.1",
+    "torchinfo>=1.8.0",
+    "torchvision>=0.22.1",
     "notebook",
-    "numpy",
-    "pandas",
     "pip",
     "python-dotenv",
     "scikit-learn",
-    "seaborn>=0.13.2",
     "tqdm",
     "typer",
 ]
-requires-python = "~=3.10.0"
+requires-python = ">=3.11,<3.12"
 
 [tool.black]
 line-length = 99
@@ -49,5 +58,3 @@ exclude = '''
 profile = "black"
 known_first_party = ["software_development_ml_practice_1"]
 force_sort_within_sections = true
-
-
