@@ -1,10 +1,9 @@
 from pathlib import Path
 
 from loguru import logger
+import pandas as pd
 from tqdm import tqdm
 import typer
-
-import pandas as pd
 
 from software_development_ml_practice_1.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
