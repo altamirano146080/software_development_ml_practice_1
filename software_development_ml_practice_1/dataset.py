@@ -4,8 +4,11 @@ from loguru import logger
 import pandas as pd
 from tqdm import tqdm
 import typer
+import numpy as np
 
 from software_development_ml_practice_1.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from pathlib import Path
+
 
 app = typer.Typer()
 
@@ -17,26 +20,53 @@ def main(
     force_download: bool = False,
 ):
     # ---- DOWNLOAD DATA ----
-    if not input_path.exists() or force_download:
-        logger.info("Downloading dataset...")
-
-        df = pd.read_parquet(
-            "hf://datasets/juliensimon/sentry-impact-risk/data/sentry_impact_risk.parquet"
-        )
-        # Save the downloaded data to a CSV file
-        input_path.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(input_path, index=False)
-
-        logger.success("Dataset downloaded.")
+    DATASET_URI = "hf://datasets/juliensimon/sentry-impact-risk/data/sentry_impact_risk.parquet"
+    SAMPLE_PATH = RAW_DATA_DIR / "dataset.csv"
+    
+    if SAMPLE_PATH.exists():
+        df = pd.read_csv(SAMPLE_PATH)
+        print(f"Loaded local sample with {len(df)} rows from {SAMPLE_PATH}")
     else:
-        logger.info("Dataset already exists.")
-        df = pd.read_csv(input_path)
+        df = pd.read_parquet(DATASET_URI)
+    
+        df = df.sample(
+            n=min(500, len(df)),
+            random_state=42
+        )
+    
+        df.to_csv(SAMPLE_PATH, index=False)
+        print(f"Downloaded dataset and saved a sample of {len(df)} rows to {SAMPLE_PATH}")
+    
+    df.head()
 
-    # ---- PROCESS DATA (adapt this section later) ----
+    # ---- PROCESS DATA  ----
     logger.info("Processing dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
+    df_reg = df.dropna().copy()
+
+    print(f"Original dataset size: {len(df)}")
+    print(f"Dataset size after removing missing values: {len(df_reg)}")
+
+    print(f"Transforming target")
+
+    df_reg["log_impact_probability"] = np.log10(
+        df_reg["impact_probability"]
+    )
+
+    print("Selecting features")
+
+    features = df_reg.select_dtypes(include="number").columns.tolist()
+
+    features.remove("impact_probability")
+    features.remove("log_impact_probability")
+    
+    X = df_reg[features]
+    y = df_reg["log_impact_probability"]
+    
+    print("Selected features:")
+    print(features)
+    
+    print(f"\nNumber of features: {X.shape[1]}")
+
     logger.success("Processing dataset complete.")
     # -----------------------------------------
 
