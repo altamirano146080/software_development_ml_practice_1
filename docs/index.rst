@@ -12,6 +12,7 @@ documentation for details.
 
 .. automodule:: dataset
     :members:
+    :exclude-members: main
 
 .. toctree::
    :maxdepth: 2
