@@ -1,81 +1,72 @@
+"""
+Module for data ingestion and storage.
+"""
+
 from pathlib import Path
 
 from loguru import logger
 import pandas as pd
-from tqdm import tqdm
 import typer
-import numpy as np
 
 from software_development_ml_practice_1.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
-from pathlib import Path
-
+# Importing the function we just created in features.py
+from software_development_ml_practice_1.features import preprocess_features
 
 app = typer.Typer()
 
-def funcion_prueba():
+def test_function() -> None:
     """
-    Funcion prueba
+    Test function to verify module configuration.
+
+    Returns:
+        None: This function does not return any value.
     """
     return
 
 @app.command()
 def main(
     input_path: Path = RAW_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
+    output_path_x: Path = PROCESSED_DATA_DIR / "X_processed.csv",
+    output_path_y: Path = PROCESSED_DATA_DIR / "y_processed.csv",
     force_download: bool = False,
 ):
+    """
+    Downloads raw data, applies feature engineering, and saves the results.
 
-    # ---- DOWNLOAD DATA ----
+    If the raw data file does not exist locally, it downloads it from 
+    HuggingFace. Afterward, it processes the data and saves the feature 
+    matrix (X) and the target vector (y) into the processed data directory.
+
+    Args:
+        input_path (Path): Path where the raw sample will be saved or read from.
+        output_path_x (Path): Path to save the processed features (X).
+        output_path_y (Path): Path to save the processed target vector (y).
+        force_download (bool): If True, forces the download from HuggingFace, 
+            ignoring any existing local file.
+    """
     DATASET_URI = "hf://datasets/juliensimon/sentry-impact-risk/data/sentry_impact_risk.parquet"
-    SAMPLE_PATH = RAW_DATA_DIR / "dataset.csv"
     
-    if SAMPLE_PATH.exists():
-        df = pd.read_csv(SAMPLE_PATH)
-        print(f"Loaded local sample with {len(df)} rows from {SAMPLE_PATH}")
+    # ---- 1. DOWNLOAD DATA ----
+    if input_path.exists() and not force_download:
+        df = pd.read_csv(input_path)
+        logger.info(f"Loaded local sample with {len(df)} rows from {input_path}")
     else:
+        logger.info(f"Downloading dataset from {DATASET_URI}...")
         df = pd.read_parquet(DATASET_URI)
+        
+        df = df.sample(n=min(500, len(df)), random_state=42)
+        df.to_csv(input_path, index=False)
+        logger.success(f"Downloaded dataset and saved {len(df)} rows to {input_path}")
+        
+    # ---- 2. PROCESS DATA ----
+    logger.info("Starting Feature Engineering...")
+    X, y = preprocess_features(df)
     
-        df = df.sample(
-            n=min(500, len(df)),
-            random_state=42
-        )
-    
-        df.to_csv(SAMPLE_PATH, index=False)
-        print(f"Downloaded dataset and saved a sample of {len(df)} rows to {SAMPLE_PATH}")
-    
-    df.head()
-
-    # ---- PROCESS DATA  ----
-    logger.info("Processing dataset...")
-    df_reg = df.dropna().copy()
-
-    print(f"Original dataset size: {len(df)}")
-    print(f"Dataset size after removing missing values: {len(df_reg)}")
-
-    print(f"Transforming target")
-
-    df_reg["log_impact_probability"] = np.log10(
-        df_reg["impact_probability"]
-    )
-
-    print("Selecting features")
-
-    features = df_reg.select_dtypes(include="number").columns.tolist()
-
-    features.remove("impact_probability")
-    features.remove("log_impact_probability")
-    
-    X = df_reg[features]
-    y = df_reg["log_impact_probability"]
-    
-    print("Selected features:")
-    print(features)
-    
-    print(f"\nNumber of features: {X.shape[1]}")
-
-    logger.success("Processing dataset complete.")
-    # -----------------------------------------
-
+    # ---- 3. SAVE PROCESSED DATA ----
+    # We save the data so the model can be trained later without rerunning this script
+    X.to_csv(output_path_x, index=False)
+    y.to_csv(output_path_y, index=False)
+    logger.success(f"Processed data saved to {PROCESSED_DATA_DIR}")
 
 if __name__ == "__main__":
     app()

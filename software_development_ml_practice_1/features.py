@@ -1,29 +1,49 @@
-from pathlib import Path
+"""
+Module for feature engineering.
+Contains functions to clean data and generate predictor variables.
+"""
 
+import pandas as pd
+import numpy as np
 from loguru import logger
-from tqdm import tqdm
-import typer
 
-from software_development_ml_practice_1.config import PROCESSED_DATA_DIR
+def preprocess_features(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Cleans the dataset and separates the features (X) from the target (y).
 
-app = typer.Typer()
+    This function removes missing values, applies a base-10 logarithmic 
+    transformation to the impact probability, and selects only numerical 
+    columns as predictor variables.
 
+    Args:
+        df (pd.DataFrame): The raw dataset.
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Generating features from dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Features generation complete.")
-    # -----------------------------------------
-
-
-if __name__ == "__main__":
-    app()
+    Returns:
+        tuple[pd.DataFrame, pd.Series]: A tuple containing:
+            - X (pd.DataFrame): Feature matrix (numerical variables).
+            - y (pd.Series): Target vector (log_impact_probability).
+    """
+    logger.info("Processing dataset: removing missing values...")
+    df_reg = df.dropna().copy()
+    
+    logger.info(f"Dataset size after dropping NaNs: {len(df_reg)}")
+    
+    logger.info("Transforming the target variable...")
+    # Calculate the base-10 logarithm
+    df_reg["log_impact_probability"] = np.log10(df_reg["impact_probability"])
+    
+    logger.info("Selecting numerical features...")
+    features = df_reg.select_dtypes(include="number").columns.tolist()
+    
+    # Ensure the target (original or transformed) does not leak into the features
+    if "impact_probability" in features:
+        features.remove("impact_probability")
+    if "log_impact_probability" in features:
+        features.remove("log_impact_probability")
+        
+    X = df_reg[features]
+    y = df_reg["log_impact_probability"]
+    
+    logger.info(f"Final number of features: {X.shape[1]}")
+    
+    return X, y
