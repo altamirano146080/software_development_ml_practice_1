@@ -4,7 +4,11 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Machine learning project focused on data exploration, model training, visualization, and performance evaluation.
+Machine learning project focused on data exploration, model training, visualization, and performance evaluation. The dataset consists on future meteorite collision risk analysis. The objective of the project is to learn on hazard estimations and to predict future threats.
+
+As of now, all the project relies on notebooks/explore_dataset.ipynb
+
+You can also download the data by using the command make data, it will be implemented in the notebook 
 
 ## Project Organization
 
