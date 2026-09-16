@@ -12,6 +12,11 @@ from pathlib import Path
 
 app = typer.Typer()
 
+def funcion_prueba():
+    """
+    Funcion prueba
+    """
+    return
 
 @app.command()
 def main(
@@ -19,6 +24,7 @@ def main(
     output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     force_download: bool = False,
 ):
+
     # ---- DOWNLOAD DATA ----
     DATASET_URI = "hf://datasets/juliensimon/sentry-impact-risk/data/sentry_impact_risk.parquet"
     SAMPLE_PATH = RAW_DATA_DIR / "dataset.csv"
