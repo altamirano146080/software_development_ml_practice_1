@@ -63,3 +63,12 @@ You can also download the data by using the command make data, it will be implem
 
 --------
 
+
+config.py: defines the project paths and creates the required directories.
+dataset.py: downloads the asteroid impact-risk dataset and saves a local sample.
+features.py: cleans the data, transforms the target variable, selects numerical features, and creates the files used by the model.
+plots.py: generates the exploratory data analysis visualizations.
+modeling/train.py: splits the data, scales the features, trains the neural network, evaluates it, and saves the model and metrics.
+modeling/predict.py: loads the trained model and generates predictions for the processed dataset.
+notebooks/explore_dataset.ipynb: presents the complete analysis interactively, including data exploration, preprocessing, training, and evaluation.
+
