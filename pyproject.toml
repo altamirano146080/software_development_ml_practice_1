@@ -77,6 +77,7 @@ dependencies = [
     "voila>=0.5.12",
     "xgboost>=3.4.1",
     "jupyterlab-git>=0.54.1",
+    "dotenv>=0.9.9",
 ]
 
 [tool.black]
