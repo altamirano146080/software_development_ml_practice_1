@@ -103,11 +103,6 @@ docs-html:
 	$(MAKE) -C docs html
 
 
-## Build the documentation in PDF format
-.PHONY: docs-pdf
-docs-pdf:
-	$(MAKE) -C docs latexpdf
-
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
