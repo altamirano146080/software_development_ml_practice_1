@@ -97,6 +97,17 @@ pipeline: data features plots train predict
 notebook: requirements
 	uv run --with jupyter jupyter lab
 
+## Build the documentation in HTML format
+.PHONY: docs-html
+docs-html:
+	$(MAKE) -C docs html
+
+
+## Build the documentation in PDF format
+.PHONY: docs-pdf
+docs-pdf:
+	$(MAKE) -C docs latexpdf
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
