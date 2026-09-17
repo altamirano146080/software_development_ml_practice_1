@@ -1,3 +1,10 @@
+"""Configuration settings for the asteroid impact-risk project.
+
+This module defines the project root and the locations used for raw data,
+processed data, models, and generated reports. It also ensures the required
+folders exist when the package is imported.
+"""
+
 from pathlib import Path
 
 from dotenv import load_dotenv
