@@ -22,7 +22,7 @@ You can also download the data by using the command make data, it will be implem
 │   ├── processed      <- The final, canonical data sets for modeling.
 │   └── raw            <- The original, immutable data dump.
 │
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
+├── docs               <- Sphinx documentation source files and generated documentation
 │
 ├── models             <- Trained and serialized models, model predictions, or model summaries
 │

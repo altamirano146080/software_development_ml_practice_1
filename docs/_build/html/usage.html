@@ -1,13 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Project Workflow" href="workflow.html"><link rel="prev" title="Installation" href="installation.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - Software Development Oriented to Machine Learning Practice  documentation</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+        <title>Usage - Software Development Oriented to Machine Learning Practice documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -172,7 +172,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -184,16 +184,16 @@
   
   <span class="sidebar-brand-text">Software Development Oriented to Machine Learning Practice  documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="#" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">Project Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
@@ -216,7 +216,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/usage.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -224,30 +230,103 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<p>The project should be executed in the following order:</p>
+<ol class="arabic simple">
+<li><p>Download and prepare the dataset.</p></li>
+<li><p>Create the features and labels.</p></li>
+<li><p>Train and evaluate the model.</p></li>
+<li><p>Generate predictions.</p></li>
+</ol>
+<section id="download-and-prepare-the-dataset">
+<h2>Download and prepare the dataset<a class="headerlink" href="#download-and-prepare-the-dataset" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">dataset</span></code> module downloads the dataset from Hugging Face, creates a
+local sample, removes incomplete rows, and saves the cleaned dataset.</p>
+<p>Run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>software_development_ml_practice_1.dataset
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>By default, the project downloads a sample of up to 500 rows.</p>
+<p>To download the dataset again, use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>software_development_ml_practice_1.dataset<span class="w"> </span>--force-download
+</pre></div>
+</div>
+<p>The generated files are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data/raw/dataset.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data/processed/dataset.csv</span></code></p></li>
+</ul>
+</section>
+<section id="create-features">
+<h2>Create features<a class="headerlink" href="#create-features" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> module creates the input features and the target labels.</p>
+<p>Run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>software_development_ml_practice_1.features
+</pre></div>
+</div>
+<p>This command creates:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data/processed/features.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data/processed/labels.csv</span></code></p></li>
+</ul>
+</section>
+<section id="train-the-model">
+<h2>Train the model<a class="headerlink" href="#train-the-model" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">train</span></code> module trains and evaluates the neural network.</p>
+<p>Run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>software_development_ml_practice_1.modeling.train
+</pre></div>
+</div>
+<p>This command creates:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">models/impact_probability_model.keras</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">models/feature_scaler.joblib</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reports/model_metrics.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reports/training_history.csv</span></code></p></li>
+</ul>
+</section>
+<section id="generate-predictions">
+<h2>Generate predictions<a class="headerlink" href="#generate-predictions" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> module loads the trained model and generates predictions.</p>
+<p>Run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>software_development_ml_practice_1.modeling.predict
+</pre></div>
+</div>
+<p>The predictions are saved as a CSV file in the processed data directory.</p>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="workflow.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Project Workflow</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="installation.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Installation</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -266,8 +345,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#download-and-prepare-the-dataset">Download and prepare the dataset</a></li>
+<li><a class="reference internal" href="#create-features">Create features</a></li>
+<li><a class="reference internal" href="#train-the-model">Train the model</a></li>
+<li><a class="reference internal" href="#generate-predictions">Generate predictions</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -276,8 +377,5 @@
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

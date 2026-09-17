@@ -25,8 +25,26 @@ def predict(
     scaler_path: Path = SCALER_PATH,
     predictions_path: Path = PREDICTIONS_PATH,
 ) -> pd.DataFrame:
-    """
-    Generates predictions using the trained model.
+    """Generate impact probability predictions.
+
+    The trained model and feature scaler are loaded from disk. The input
+    features are scaled before being passed to the model.
+
+    Parameters
+    ----------
+    features_path:
+        Path to the processed feature data.
+    model_path:
+        Path to the trained Keras model.
+    scaler_path:
+        Path to the saved feature scaler.
+    predictions_path:
+        Path where predictions will be saved.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe containing logarithmic and original-scale predictions.
     """
 
     features = pd.read_csv(features_path)
