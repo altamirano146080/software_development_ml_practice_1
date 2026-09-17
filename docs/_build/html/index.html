@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Installation" href="installation.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Software Development Oriented to Machine Learning Practice documentation</title>
@@ -190,7 +190,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">Project Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
+</ul>
+
 </div>
 </div>
 
@@ -227,75 +235,94 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="software-development-oriented-to-machine-learning-practice-documentation">
-<h1>Software Development Oriented to Machine Learning Practice documentation<a class="headerlink" href="#software-development-oriented-to-machine-learning-practice-documentation" title="Link to this heading">¶</a></h1>
-<p>Add your content using <code class="docutils literal notranslate"><span class="pre">reStructuredText</span></code> syntax. See the
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">reStructuredText</a>
-documentation for details.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="dataset.download_dataset">
-<span class="sig-prename descclassname"><span class="pre">dataset.</span></span><span class="sig-name descname"><span class="pre">download_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#dataset.download_dataset" title="Link to this definition">¶</a></dt>
-<dd><p>Load the Sentry Impact Risk dataset.</p>
-<p>If a local CSV file already exists and <code class="docutils literal notranslate"><span class="pre">force_download</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>,
-the local file is loaded. Otherwise, the dataset is downloaded from
-Hugging Face, a sample is selected, and the sample is saved locally.</p>
-<section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>input_path<span class="classifier">pathlib.Path</span></dt><dd><p>Path where the local raw dataset sample is stored.</p>
-</dd>
-<dt>force_download<span class="classifier">bool, default=False</span></dt><dd><p>Whether to download the dataset even if a local copy exists.</p>
-</dd>
-</dl>
-</section>
-<section id="returns">
-<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>pandas.DataFrame</dt><dd><p>The loaded dataset.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dataset.preprocess_dataset">
-<span class="sig-prename descclassname"><span class="pre">dataset.</span></span><span class="sig-name descname"><span class="pre">preprocess_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dataset.preprocess_dataset" title="Link to this definition">¶</a></dt>
-<dd><p>Preprocess the dataset for regression.</p>
-<p>Missing observations are removed and the <code class="docutils literal notranslate"><span class="pre">impact_probability</span></code> target
-is transformed using a base-10 logarithm. All remaining numerical
-columns are selected as features.</p>
-<section id="id1">
-<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>df<span class="classifier">pandas.DataFrame</span></dt><dd><p>Raw input dataset.</p>
-</dd>
-</dl>
-</section>
-<section id="id2">
-<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>X<span class="classifier">pandas.DataFrame</span></dt><dd><p>Numerical feature matrix.</p>
-</dd>
-<dt>y<span class="classifier">pandas.Series</span></dt><dd><p>Log-transformed target variable.</p>
-</dd>
-<dt>features<span class="classifier">list of str</span></dt><dd><p>Names of the selected numerical features.</p>
-</dd>
-</dl>
-</section>
-<section id="raises">
-<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>KeyError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">impact_probability</span></code> is not present in the input dataset.</p>
-</dd>
-<dt>ValueError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">impact_probability</span></code> contains non-positive values, since the
-base-10 logarithm is only defined for positive values.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<div class="toctree-wrapper compound">
+          <section id="software-development-oriented-to-machine-learning-practice">
+<h1>Software Development Oriented to Machine Learning Practice<a class="headerlink" href="#software-development-oriented-to-machine-learning-practice" title="Link to this heading">¶</a></h1>
+<p>This project focuses on the analysis of asteroid impact risk using machine
+learning techniques.</p>
+<p>The project includes:</p>
+<ul class="simple">
+<li><p>Dataset downloading and preparation.</p></li>
+<li><p>Data cleaning and transformation.</p></li>
+<li><p>Feature creation.</p></li>
+<li><p>Exploratory data analysis.</p></li>
+<li><p>Neural network training.</p></li>
+<li><p>Model evaluation.</p></li>
+<li><p>Impact probability predictions.</p></li>
+<li><p>Visualization and reporting.</p></li>
+</ul>
+<section id="project-workflow">
+<h2>Project workflow<a class="headerlink" href="#project-workflow" title="Link to this heading">¶</a></h2>
+<p>The complete project follows this workflow:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dataset from Hugging Face
+           |
+           v
+Dataset downloading and cleaning
+           |
+           v
+Feature creation
+           |
+           v
+Neural network training
+           |
+           v
+Model evaluation
+           |
+           v
+Impact probability predictions
+</pre></div>
 </div>
+</section>
+<section id="project-outputs">
+<h2>Project outputs<a class="headerlink" href="#project-outputs" title="Link to this heading">¶</a></h2>
+<p>The trained models are stored in <code class="docutils literal notranslate"><span class="pre">models/</span></code>.</p>
+<p>The metrics, training history, and visualizations are stored in <code class="docutils literal notranslate"><span class="pre">reports/</span></code>.</p>
+<p>To install and run the project, see <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-uv">Using <code class="docutils literal notranslate"><span class="pre">uv</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-venv">Using <code class="docutils literal notranslate"><span class="pre">venv</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#building-the-documentation">Building the documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#download-and-prepare-the-dataset">Download and prepare the dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#create-features">Create features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#train-the-model">Train the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#generate-predictions">Generate predictions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">Project Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#dataset-download">Dataset download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#feature-engineering">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#model-architecture">Model architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#data-splitting-and-scaling">Data splitting and scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#evaluation">Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="results.html#model-metrics">Model metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="results.html#training-history">Training history</a></li>
+<li class="toctree-l2"><a class="reference internal" href="results.html#generated-visualizations">Generated visualizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.dataset">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.config">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.plots">Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.modeling.train">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-software_development_ml_practice_1.modeling.predict">Model prediction</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 </section>
 
         </article>
@@ -303,7 +330,15 @@ base-10 logarithm is only defined for positive values.</p>
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="installation.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Installation</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
           
         </div>
         <div class="bottom-of-page">
@@ -335,9 +370,9 @@ base-10 logarithm is only defined for positive values.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Software Development Oriented to Machine Learning Practice documentation</a><ul>
-<li><a class="reference internal" href="#dataset.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
-<li><a class="reference internal" href="#dataset.preprocess_dataset"><code class="docutils literal notranslate"><span class="pre">preprocess_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#">Software Development Oriented to Machine Learning Practice</a><ul>
+<li><a class="reference internal" href="#project-workflow">Project workflow</a></li>
+<li><a class="reference internal" href="#project-outputs">Project outputs</a></li>
 </ul>
 </li>
 </ul>

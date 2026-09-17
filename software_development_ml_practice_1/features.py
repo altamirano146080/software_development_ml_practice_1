@@ -19,8 +19,24 @@ def create_features(
     features_path: Path = FEATURES_PATH,
     labels_path: Path = LABELS_PATH,
 ) -> tuple[pd.DataFrame, pd.Series]:
-    """
-    Creates numerical features and the transformed target variable.
+    """Create model features and the transformed target variable.
+
+    Missing rows are removed and the impact probability is transformed using
+    a base-10 logarithm. Numerical columns are used as model features.
+
+    Parameters
+    ----------
+    input_path:
+        Path to the processed dataset.
+    features_path:
+        Path where the feature data will be saved.
+    labels_path:
+        Path where the target labels will be saved.
+
+    Returns
+    -------
+    tuple[pandas.DataFrame, pandas.Series]
+        The feature matrix and transformed target variable.
     """
 
     dataframe = pd.read_csv(input_path)

@@ -8,7 +8,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../software_development_ml_practice_1"))
+sys.path.insert(0, os.path.abspath(".."))
 
 project = 'Software Development Oriented to Machine Learning Practice'
 copyright = '2026, Ruth Altamirano, Malena Chacón, Odei Martinez de Morentin'

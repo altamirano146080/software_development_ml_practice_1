@@ -1,13 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Results" href="results.html"><link rel="prev" title="Usage" href="usage.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - Software Development Oriented to Machine Learning Practice  documentation</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+        <title>Project Workflow - Software Development Oriented to Machine Learning Practice documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -172,7 +172,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -184,17 +184,17 @@
   
   <span class="sidebar-brand-text">Software Development Oriented to Machine Learning Practice  documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="#" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">Project Workflow</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Project Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 </ul>
@@ -216,7 +216,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/workflow.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -224,30 +230,149 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="project-workflow">
+<h1>Project Workflow<a class="headerlink" href="#project-workflow" title="Link to this heading">¶</a></h1>
+<section id="dataset-download">
+<h2>Dataset download<a class="headerlink" href="#dataset-download" title="Link to this heading">¶</a></h2>
+<p>The project downloads the dataset from Hugging Face using the following
+source:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET_URI</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"hf://datasets/juliensimon/sentry-impact-risk/"</span>
+    <span class="s2">"data/sentry_impact_risk.parquet"</span>
+<span class="p">)</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>A sample of up to 500 rows is selected and stored in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/dataset.csv
+</pre></div>
+</div>
+<p>The dataset is then cleaned by removing rows containing missing values.
+The cleaned dataset is stored in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/processed/dataset.csv
+</pre></div>
+</div>
+</section>
+<section id="feature-engineering">
+<h2>Feature engineering<a class="headerlink" href="#feature-engineering" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">features.py</span></code> module reads the processed dataset and removes missing
+values if necessary.</p>
+<p>The target variable is transformed using a base-10 logarithm:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[y = \log_{10}(\text{impact_probability})\]</div>
+</div>
+<p>All numerical columns are selected as model features except:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">impact_probability</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log_impact_probability</span></code></p></li>
+</ul>
+<p>The resulting files are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">features.csv</span></code>: model input variables.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">labels.csv</span></code>: transformed target variable.</p></li>
+</ul>
+</section>
+<section id="model-architecture">
+<h2>Model architecture<a class="headerlink" href="#model-architecture" title="Link to this heading">¶</a></h2>
+<p>The neural network is defined in <code class="docutils literal notranslate"><span class="pre">modeling/train.py</span></code>.</p>
+<p>It contains:</p>
+<ul class="simple">
+<li><p>An input layer.</p></li>
+<li><p>A dense layer with 64 neurons and ReLU activation.</p></li>
+<li><p>A dense layer with 32 neurons and ReLU activation.</p></li>
+<li><p>A dense layer with 16 neurons and ReLU activation.</p></li>
+<li><p>An output layer with one neuron.</p></li>
+</ul>
+<p>The model uses:</p>
+<ul class="simple">
+<li><p>The Adam optimizer.</p></li>
+<li><p>A learning rate of <code class="docutils literal notranslate"><span class="pre">0.001</span></code>.</p></li>
+<li><p>Mean squared error as the loss function.</p></li>
+<li><p>Mean absolute error as a metric.</p></li>
+</ul>
+</section>
+<section id="data-splitting-and-scaling">
+<h2>Data splitting and scaling<a class="headerlink" href="#data-splitting-and-scaling" title="Link to this heading">¶</a></h2>
+<p>The dataset is divided into training and test data using an 80/20 split.</p>
+<p>The features are standardized with <code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code> before training:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The scaler is saved to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>models/feature_scaler.joblib
+</pre></div>
+</div>
+</section>
+<section id="training">
+<h2>Training<a class="headerlink" href="#training" title="Link to this heading">¶</a></h2>
+<p>The model is trained for a maximum of 100 epochs with a batch size of 32.</p>
+<p>Early stopping is used to reduce overfitting. Training stops when the
+validation loss does not improve for 15 consecutive epochs.</p>
+</section>
+<section id="evaluation">
+<h2>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">¶</a></h2>
+<p>The model is evaluated using:</p>
+<ul class="simple">
+<li><p>MAE: Mean Absolute Error.</p></li>
+<li><p>RMSE: Root Mean Squared Error.</p></li>
+<li><p>R²: Coefficient of Determination.</p></li>
+</ul>
+<p>The results are saved to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>reports/model_metrics.csv
+</pre></div>
+</div>
+<p>The training history is saved to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>reports/training_history.csv
+</pre></div>
+</div>
+</section>
+<section id="prediction">
+<h2>Prediction<a class="headerlink" href="#prediction" title="Link to this heading">¶</a></h2>
+<p>The prediction module loads:</p>
+<ul class="simple">
+<li><p>The trained Keras model.</p></li>
+<li><p>The saved feature scaler.</p></li>
+<li><p>The processed feature data.</p></li>
+</ul>
+<p>The model produces a prediction in logarithmic form. The original scale is
+then recovered using:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\text{impact probability} = 10^{\text{log prediction}}\]</div>
+</div>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="results.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Results</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="usage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Usage</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -266,8 +391,33 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Project Workflow</a><ul>
+<li><a class="reference internal" href="#dataset-download">Dataset download</a></li>
+<li><a class="reference internal" href="#feature-engineering">Feature engineering</a></li>
+<li><a class="reference internal" href="#model-architecture">Model architecture</a></li>
+<li><a class="reference internal" href="#data-splitting-and-scaling">Data splitting and scaling</a></li>
+<li><a class="reference internal" href="#training">Training</a></li>
+<li><a class="reference internal" href="#evaluation">Evaluation</a></li>
+<li><a class="reference internal" href="#prediction">Prediction</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -276,8 +426,6 @@
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
 </html>
