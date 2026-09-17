@@ -15,54 +15,55 @@ The repository analyzes a dataset related to potential asteroid impact risk. It 
 - baseline neural network training
 - model evaluation and predictions
 
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- Sphinx documentation source files and generated documentation
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         software_development_ml_practice_1 and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── software_development_ml_practice_1   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes software_development_ml_practice_1 a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
+The model uses asteroid characteristics such as encounter velocity, absolute magnitude, diameter, Palermo scale, and potential impact dates to predict the logarithm of the impact probability.
 
+## Project structure
+
+```text
+.
+├── LICENSE
+├── Makefile
+├── README.md
+├── pyproject.toml
+├── setup.cfg
+├── data/
+│   ├── external/
+│   ├── interim/
+│   ├── processed/
+│   │   ├── dataset.csv
+│   │   ├── features.csv
+│   │   ├── labels.csv
+│   │   └── predictions.csv
+│   └── raw/
+│       └── dataset.csv
+├── docs/
+├── models/
+│   ├── feature_scaler.joblib
+│   └── impact_probability_model.keras
+├── notebooks/
+│   └── explore_dataset.ipynb
+├── references/
+├── reports/
+│   ├── model_metrics.csv
+│   ├── training_history.csv
+│   └── figures/
+│       ├── correlation_heatmap.png
+│       ├── impact_probability_distribution.png
+│       ├── velocity_vs_palermo.png
+│       ├── magnitude_vs_palermo.png
+│       └── potential_impact_timeline.png
+├── software_development_ml_practice_1/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── dataset.py
+│   ├── features.py
+│   ├── plots.py
+│   └── modeling/
+│       ├── __init__.py
+│       ├── train.py
+│       └── predict.py
+└── uv.lock
+```
 
 ## Repository components
 
