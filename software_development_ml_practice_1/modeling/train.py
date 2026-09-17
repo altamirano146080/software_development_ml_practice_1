@@ -1,125 +1,150 @@
-"""
-Module for training and evaluating the machine learning model.
-"""
-
 from pathlib import Path
-import joblib
 
-from loguru import logger
+import joblib
+import numpy as np
 import pandas as pd
+import tensorflow as tf
+import typer
+from loguru import logger
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import typer
 
-# Assuming MODELS_DIR is defined in your config.py. If not, add it.
-from software_development_ml_practice_1.config import PROCESSED_DATA_DIR, MODELS_DIR
+from software_development_ml_practice_1.config import (
+    MODELS_DIR,
+    PROCESSED_DATA_DIR,
+    REPORTS_DIR,
+)
 
 app = typer.Typer()
 
-def build_baseline_model(input_shape: int) -> models.Sequential:
+FEATURES_PATH = PROCESSED_DATA_DIR / "features.csv"
+LABELS_PATH = PROCESSED_DATA_DIR / "labels.csv"
+
+MODEL_PATH = MODELS_DIR / "impact_probability_model.keras"
+SCALER_PATH = MODELS_DIR / "feature_scaler.joblib"
+METRICS_PATH = REPORTS_DIR / "model_metrics.csv"
+
+
+def build_model(input_shape: int) -> tf.keras.Model:
     """
-    Builds and compiles a baseline neural network for regression.
-
-    This simple architecture is designed to predict the logarithmic 
-    impact probability of asteroids based on numerical features.
-
-    Args:
-        input_shape (int): The number of features in the input data.
-
-    Returns:
-        models.Sequential: A compiled Keras Sequential model.
+    Creates the neural network architecture.
     """
-    model = models.Sequential([
-        layers.Input(shape=(input_shape,)),
-        layers.Dense(64, activation='relu'),
-        layers.Dense(32, activation='relu'),
-        layers.Dense(1, activation='linear')
-    ])
+
+    model = tf.keras.Sequential(
+        [
+            tf.keras.layers.Input(shape=(input_shape,)),
+            tf.keras.layers.Dense(64, activation="relu"),
+            tf.keras.layers.Dense(32, activation="relu"),
+            tf.keras.layers.Dense(16, activation="relu"),
+            tf.keras.layers.Dense(1),
+        ]
+    )
 
     model.compile(
-        optimizer='adam',
-        loss='mse',
-        metrics=['mae']
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+        loss="mse",
+        metrics=["mae"],
     )
-    
+
     return model
 
-@app.command()
-def main(
-    x_path: Path = PROCESSED_DATA_DIR / "X_processed.csv",
-    y_path: Path = PROCESSED_DATA_DIR / "y_processed.csv",
-    model_output_path: Path = MODELS_DIR / "baseline_model.keras",
-    scaler_output_path: Path = MODELS_DIR / "scaler.pkl",
-    epochs: int = 50,
-    batch_size: int = 32,
-    test_size: float = 0.2
+
+def train_model(
+    features_path: Path = FEATURES_PATH,
+    labels_path: Path = LABELS_PATH,
+    model_path: Path = MODEL_PATH,
+    scaler_path: Path = SCALER_PATH,
+    metrics_path: Path = METRICS_PATH,
 ) -> None:
     """
-    Trains a baseline neural network model on the processed dataset.
-
-    Loads the processed features and target, splits them into training 
-    and testing sets, scales the features using StandardScaler, trains 
-    a Keras model, evaluates its performance, and saves both the model 
-    and the scaler to disk for future inference.
-
-    Args:
-        x_path (Path): Path to the processed features CSV.
-        y_path (Path): Path to the processed target CSV.
-        model_output_path (Path): Path to save the trained Keras model.
-        scaler_output_path (Path): Path to save the fitted StandardScaler.
-        epochs (int): Number of epochs to train the model.
-        batch_size (int): Batch size for training.
-        test_size (float): Proportion of the dataset to include in the test split.
+    Trains and evaluates the neural network.
     """
-    logger.info(f"Loading processed data from {PROCESSED_DATA_DIR}...")
-    try:
-        X = pd.read_csv(x_path)
-        y = pd.read_csv(y_path)
-    except FileNotFoundError:
-        logger.error(f"Processed data not found. Please run dataset.py first.")
-        raise typer.Exit(code=1)
 
-    logger.info(f"Splitting data into train and test sets (test_size={test_size})...")
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, random_state=42
+    features = pd.read_csv(features_path)
+    labels = pd.read_csv(labels_path)["log_impact_probability"]
+
+    x_train, x_test, y_train, y_test = train_test_split(
+        features,
+        labels,
+        test_size=0.2,
+        random_state=42,
     )
 
-    logger.info("Scaling features using StandardScaler...")
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
 
-    logger.info("Building the neural network model...")
-    model = build_baseline_model(input_shape=X_train_scaled.shape[1])
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
 
-    logger.info(f"Training the model for {epochs} epochs...")
-    # Training the model, keeping 20% of the training data for validation
+    model = build_model(input_shape=x_train_scaled.shape[1])
+
     history = model.fit(
-        X_train_scaled, 
-        y_train, 
-        epochs=epochs, 
-        batch_size=batch_size, 
+        x_train_scaled,
+        y_train,
         validation_split=0.2,
-        verbose=1
+        epochs=100,
+        batch_size=32,
+        verbose=1,
+        callbacks=[
+            tf.keras.callbacks.EarlyStopping(
+                monitor="val_loss",
+                patience=15,
+                restore_best_weights=True,
+            )
+        ],
     )
 
-    logger.info("Evaluating the model on the test set...")
-    test_loss, test_mae = model.evaluate(X_test_scaled, y_test, verbose=0)
-    logger.success(f"Test Loss (MSE): {test_loss:.4f} | Test MAE: {test_mae:.4f}")
+    predictions = model.predict(
+        x_test_scaled,
+        verbose=0,
+    ).ravel()
 
-    logger.info("Saving artifacts (Model and Scaler)...")
-    # Ensure directories exist before saving
-    model_output_path.parent.mkdir(parents=True, exist_ok=True)
-    scaler_output_path.parent.mkdir(parents=True, exist_ok=True)
-    
-    model.save(model_output_path)
-    joblib.dump(scaler, scaler_output_path)
-    
-    logger.success(f"Model saved to {model_output_path}")
-    logger.success(f"Scaler saved to {scaler_output_path}")
-    logger.info("Training pipeline completed successfully.")
+    mae = mean_absolute_error(y_test, predictions)
+    rmse = np.sqrt(mean_squared_error(y_test, predictions))
+    r2 = r2_score(y_test, predictions)
+
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+    scaler_path.parent.mkdir(parents=True, exist_ok=True)
+    metrics_path.parent.mkdir(parents=True, exist_ok=True)
+
+    model.save(model_path)
+    joblib.dump(scaler, scaler_path)
+
+    metrics = pd.DataFrame(
+        [
+            {
+                "MAE": mae,
+                "RMSE": rmse,
+                "R2": r2,
+            }
+        ]
+    )
+
+    metrics.to_csv(metrics_path, index=False)
+
+    history_dataframe = pd.DataFrame(history.history)
+    history_dataframe.to_csv(
+        REPORTS_DIR / "training_history.csv",
+        index=False,
+    )
+
+    logger.info(f"MAE: {mae:.4f}")
+    logger.info(f"RMSE: {rmse:.4f}")
+    logger.info(f"R2: {r2:.4f}")
+
+    logger.success(f"Model saved to {model_path}")
+    logger.success(f"Scaler saved to {scaler_path}")
+    logger.success(f"Metrics saved to {metrics_path}")
+
+
+@app.command()
+def main():
+    """
+    Trains and evaluates the model.
+    """
+
+    train_model()
+
 
 if __name__ == "__main__":
     app()

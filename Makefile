@@ -3,7 +3,7 @@
 #################################################################################
 
 PROJECT_NAME = software_development_ml_practice_1
-PYTHON_VERSION = 3.10
+PYTHON_VERSION = 3.13
 PYTHON_INTERPRETER = python
 
 #################################################################################
@@ -64,6 +64,39 @@ create_environment:
 data: requirements
 	$(PYTHON_INTERPRETER) software_development_ml_practice_1/dataset.py
 
+## Generate the features and labels
+.PHONY: features
+features: data
+	$(PYTHON_INTERPRETER)  software_development_ml_practice_1/features.py
+
+
+## Generate exploratory data analysis plots
+.PHONY: plots
+plots: data
+	$(PYTHON_INTERPRETER)  software_development_ml_practice_1/plots.py
+
+
+## Train and evaluate the model
+.PHONY: train
+train: features
+	$(PYTHON_INTERPRETER)  software_development_ml_practice_1/modeling/train.py
+
+
+## Generate predictions with the trained model
+.PHONY: predict
+predict: train
+	$(PYTHON_INTERPRETER)  software_development_ml_practice_1/modeling/predict.py
+
+
+## Execute the complete machine learning pipeline
+.PHONY: pipeline
+pipeline: data features plots train predict
+
+
+## Open Jupyter Lab
+.PHONY: notebook
+notebook: requirements
+	uv run --with jupyter jupyter lab
 
 #################################################################################
 # Self Documenting Commands                                                     #
