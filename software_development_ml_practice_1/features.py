@@ -6,8 +6,9 @@ training.
 """
 
 from pathlib import Path
-
+from dataset import download_dataset
 import pandas as pd
+import numpy as np
 import typer
 from loguru import logger
 
@@ -25,57 +26,6 @@ DATASET_URI = (
 
 RAW_DATA_PATH = RAW_DATA_DIR / "dataset.csv"
 PROCESSED_DATA_PATH = PROCESSED_DATA_DIR / "dataset.csv"
-
-
-def download_dataset(
-    output_path: Path = RAW_DATA_PATH,
-    sample_size: int = 500,
-    force_download: bool = False,
-) -> pd.DataFrame:
-    """Download a sample of the asteroid impact-risk dataset.
-
-    The dataset is downloaded from Hugging Face and stored locally as a CSV
-    file. If the file already exists, the local copy is reused unless
-    ``force_download`` is set to ``True``.
-
-    Parameters
-    ----------
-    output_path : Path, default=RAW_DATA_PATH
-        Path where the downloaded dataset will be saved.
-    sample_size : int, default=500
-        Maximum number of rows to keep in the local sample.
-    force_download : bool, default=False
-        Whether to download the dataset again if a local copy exists.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The downloaded dataset.
-    """
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    if output_path.exists() and not force_download:
-        logger.info(f"Loading local dataset from {output_path}")
-        return pd.read_csv(output_path)
-
-    logger.info("Downloading dataset from Hugging Face...")
-
-    dataframe = pd.read_parquet(DATASET_URI)
-
-    dataframe = dataframe.sample(
-        n=min(sample_size, len(dataframe)),
-        random_state=42,
-    )
-
-    dataframe.to_csv(output_path, index=False)
-
-    logger.success(
-        f"Dataset downloaded and saved to {output_path} "
-        f"with {len(dataframe)} rows."
-    )
-
-    return dataframe
 
 
 def prepare_dataset(
@@ -100,22 +50,49 @@ def prepare_dataset(
         The cleaned dataset.
     """
 
-    dataframe = pd.read_csv(input_path)
+    df = pd.read_csv(input_path)
 
-    original_size = len(dataframe)
+    original_size = len(df)
 
-    dataframe = dataframe.dropna().copy()
+    logger.info("Processing dataset...")
+    df_reg = df.dropna().copy()
 
-    cleaned_size = len(dataframe)
+    print(f"Original dataset size: {len(df)}")
+    print(f"Dataset size after removing missing values: {len(df_reg)}")
+
+    print(f"Transforming target")
+
+    df_reg["log_impact_probability"] = np.log10(
+        df_reg["impact_probability"]
+    )
+
+    print("Selecting features")
+
+    features = df_reg.select_dtypes(include="number").columns.tolist()
+
+    features.remove("impact_probability")
+    features.remove("log_impact_probability")
+    
+    X = df_reg[features]
+    y = df_reg["log_impact_probability"]
+    
+    print("Selected features:")
+    print(features)
+    
+    print(f"\nNumber of features: {X.shape[1]}")
+
+    logger.success("Processing dataset complete.")
+
+    cleaned_size = len(df)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    dataframe.to_csv(output_path, index=False)
+    df.to_csv(output_path, index=False)
 
     logger.info(f"Original dataset size: {original_size}")
     logger.info(f"Cleaned dataset size: {cleaned_size}")
     logger.success(f"Processed dataset saved to {output_path}")
 
-    return dataframe
+    return df
 
 
 @app.command()
