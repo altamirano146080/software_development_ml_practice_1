@@ -25,8 +25,25 @@ def download_dataset(
     sample_size: int = 500,
     force_download: bool = False,
 ) -> pd.DataFrame:
-    """
-    Descarga el dataset y guarda una muestra local en formato CSV.
+    """Download a sample of the asteroid impact-risk dataset.
+
+    The dataset is downloaded from Hugging Face and stored locally as a CSV
+    file. If the file already exists, the local copy is reused unless
+    ``force_download`` is set to ``True``.
+
+    Parameters
+    ----------
+    output_path:
+        Path where the downloaded dataset will be saved.
+    sample_size:
+        Maximum number of rows to keep in the local sample.
+    force_download:
+        Whether to download the dataset again if a local copy exists.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The downloaded dataset.
     """
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -58,8 +75,22 @@ def prepare_dataset(
     input_path: Path = RAW_DATA_PATH,
     output_path: Path = PROCESSED_DATA_PATH,
 ) -> pd.DataFrame:
-    """
-    Removes incomplete rows and saves the cleaned dataset.
+    """Clean the raw dataset and save the processed version.
+
+    Rows containing missing values are removed before the processed dataset
+    is written to disk.
+
+    Parameters
+    ----------
+    input_path:
+        Path to the raw dataset.
+    output_path:
+        Path where the cleaned dataset will be saved.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The cleaned dataset.
     """
 
     dataframe = pd.read_csv(input_path)

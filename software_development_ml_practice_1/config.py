@@ -12,6 +12,8 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 INTERIM_DATA_DIR = DATA_DIR / "interim"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
+DATASET_URI = "hf://datasets/juliensimon/sentry-impact-risk/data/sentry_impact_risk.parquet"
+SAMPLE_PATH = RAW_DATA_DIR / "dataset.csv"
 
 MODELS_DIR = PROJ_ROOT / "models"
 
