@@ -1,3 +1,9 @@
+"""Prediction pipeline for the trained impact-probability model.
+
+This module loads the saved model and scaler, transforms new feature values,
+and writes impact probability predictions to disk.
+"""
+
 from pathlib import Path
 
 import joblib
@@ -25,8 +31,26 @@ def predict(
     scaler_path: Path = SCALER_PATH,
     predictions_path: Path = PREDICTIONS_PATH,
 ) -> pd.DataFrame:
-    """
-    Generates predictions using the trained model.
+    """Generate impact probability predictions.
+
+    The trained model and feature scaler are loaded from disk. The input
+    features are scaled before being passed to the model.
+
+    Parameters
+    ----------
+    features_path : Path, default=FEATURES_PATH
+        Path to the processed feature data.
+    model_path : Path, default=MODEL_PATH
+        Path to the trained Keras model.
+    scaler_path : Path, default=SCALER_PATH
+        Path to the saved feature scaler.
+    predictions_path : Path, default=PREDICTIONS_PATH
+        Path where predictions will be saved.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe containing logarithmic and original-scale predictions.
     """
 
     features = pd.read_csv(features_path)
@@ -58,8 +82,12 @@ def predict(
 
 @app.command()
 def main():
-    """
-    Generates predictions for the processed features.
+    """Generate predictions for the processed features.
+
+    Returns
+    -------
+    None
+        Executes the prediction pipeline.
     """
 
     predict()

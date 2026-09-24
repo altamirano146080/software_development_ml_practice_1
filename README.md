@@ -1,74 +1,265 @@
 # Software Development ML Practice 1
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+Machine learning project focused on asteroid impact-risk analysis. The goal is to explore a dataset of near-Earth objects, analyze their risk-related features, train a baseline predictive model, and evaluate its performance through a structured machine learning pipeline.
 
-Machine learning project focused on data exploration, model training, visualization, and performance evaluation. The dataset consists on future meteorite collision risk analysis. The objective of the project is to learn on hazard estimations and to predict future threats.
+This project follows a Cookiecutter Data Science-style organization and includes both an exploratory notebook and modular Python scripts for data preparation, feature engineering, visualization, model training, and prediction.
 
-As of now, all the project relies on notebooks/explore_dataset.ipynb
+## Overview
 
-You can also download the data by using the command make data, it will be implemented in the notebook 
+The repository analyzes a dataset related to potential asteroid impact risk. It includes:
 
-## Project Organization
+- dataset exploration and profiling
+- missing value analysis
+- feature selection and target transformation
+- visualization of risk-related patterns
+- baseline neural network training
+- model evaluation and predictions
 
+The model uses asteroid characteristics such as encounter velocity, absolute magnitude, diameter, Palermo scale, and potential impact dates to predict the logarithm of the impact probability.
+
+## Project structure
+
+```text
+.
+├── LICENSE
+├── Makefile
+├── README.md
+├── pyproject.toml
+├── setup.cfg
+├── data/
+│   ├── external/
+│   ├── interim/
+│   ├── processed/
+│   │   ├── dataset.csv
+│   │   ├── features.csv
+│   │   ├── labels.csv
+│   │   └── predictions.csv
+│   └── raw/
+│       └── dataset.csv
+├── docs/
+├── models/
+│   ├── feature_scaler.joblib
+│   └── impact_probability_model.keras
+├── notebooks/
+│   └── explore_dataset.ipynb
+├── references/
+├── reports/
+│   ├── model_metrics.csv
+│   ├── training_history.csv
+│   └── figures/
+│       ├── correlation_heatmap.png
+│       ├── impact_probability_distribution.png
+│       ├── velocity_vs_palermo.png
+│       ├── magnitude_vs_palermo.png
+│       └── potential_impact_timeline.png
+├── software_development_ml_practice_1/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── dataset.py
+│   ├── features.py
+│   ├── plots.py
+│   └── modeling/
+│       ├── __init__.py
+│       ├── train.py
+│       └── predict.py
+└── uv.lock
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         software_development_ml_practice_1 and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── software_development_ml_practice_1   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes software_development_ml_practice_1 a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
+
+## Repository components
+
+### `notebooks/explore_dataset.ipynb`
+
+Contains the complete exploratory analysis workflow, including:
+
+- loading the dataset
+- inspecting rows, columns, and data types
+- checking missing values
+- analyzing correlations and distributions
+- visualizing asteroid risk properties
+- preprocessing the data
+- training and evaluating the baseline model
+
+### `software_development_ml_practice_1/config.py`
+
+Defines the main project directories and creates the required folders for:
+
+- raw data
+- intermediate data
+- processed data
+- trained models
+- reports and figures
+
+### `software_development_ml_practice_1/dataset.py`
+
+Downloads or loads the asteroid impact-risk dataset and saves a local sample in the raw data directory. It also creates a cleaned dataset for the following pipeline steps.
+
+### `software_development_ml_practice_1/features.py`
+
+Creates the input features and target variable by:
+
+- removing incomplete rows
+- applying a base-10 logarithmic transformation to `impact_probability`
+- selecting numerical predictive variables
+- saving `features.csv` and `labels.csv`
+
+### `software_development_ml_practice_1/plots.py`
+
+Generates the exploratory data analysis visualizations, including:
+
+- correlation heatmap
+- impact probability distribution
+- encounter velocity versus Palermo scale
+- absolute magnitude versus Palermo scale
+- potential impact timeline
+
+### `software_development_ml_practice_1/modeling/train.py`
+
+Trains and evaluates the baseline neural network model. This script:
+
+- splits the data into training and test sets
+- standardizes the input features
+- trains the TensorFlow model
+- calculates MAE, RMSE, and R² metrics
+- saves the model, scaler, metrics, and training history
+
+### `software_development_ml_practice_1/modeling/predict.py`
+
+Loads the trained model and feature scaler, generates predictions for the processed features, and saves the results to a CSV file.
+
+## Requirements
+
+This project uses Python 3.13. The required dependencies are specified in `pyproject.toml` and managed with `uv`.
+
+To install the dependencies, run:
+
+```bash
+uv sync
 ```
 
---------
+To create the virtual environment with Python 3.13 and install the dependencies:
 
+```bash
+make setup
+```
 
-config.py: defines the project paths and creates the required directories.
-dataset.py: downloads the asteroid impact-risk dataset and saves a local sample.
-features.py: cleans the data, transforms the target variable, selects numerical features, and creates the files used by the model.
-plots.py: generates the exploratory data analysis visualizations.
-modeling/train.py: splits the data, scales the features, trains the neural network, evaluates it, and saves the model and metrics.
-modeling/predict.py: loads the trained model and generates predictions for the processed dataset.
-notebooks/explore_dataset.ipynb: presents the complete analysis interactively, including data exploration, preprocessing, training, and evaluation.
+## How to run
 
+The project includes a Makefile with commands for each stage of the machine learning workflow.
+
+### Install dependencies
+
+```bash
+make requirements
+```
+
+### Download and prepare the dataset
+
+```bash
+make data
+```
+
+### Generate features and labels
+
+```bash
+make features
+```
+
+### Generate exploratory plots
+
+```bash
+make plots
+```
+
+### Train the model
+
+```bash
+make train
+```
+
+### Generate predictions
+
+```bash
+make predict
+```
+
+### Run the complete pipeline
+
+```bash
+make pipeline
+```
+
+The complete pipeline runs the following steps in order:
+
+```text
+data → features → plots → train → predict
+```
+
+### Open Jupyter Lab
+
+```bash
+make notebook
+```
+
+### View all available commands
+
+```bash
+make help
+```
+
+## Code quality
+
+To check the source code with Flake8, isort, and Black:
+
+```bash
+make lint
+```
+
+To format the source code automatically:
+
+```bash
+make format
+```
+
+To remove Python cache files:
+
+```bash
+make clean
+```
+
+## Generated outputs
+
+The trained model and scaler are saved in:
+
+- `models/impact_probability_model.keras`
+- `models/feature_scaler.joblib`
+
+The evaluation results are saved in:
+
+- `reports/model_metrics.csv`
+- `reports/training_history.csv`
+
+The exploratory plots are saved in:
+
+- `reports/figures/`
+
+The predictions are saved in:
+
+- `data/processed/predictions.csv`
+
+## Notes
+
+- The project uses a sample of up to 500 observations for the initial analysis.
+- Rows with missing values are removed before model training.
+- The target variable is transformed using `log10(impact_probability)` because the original probabilities are very small.
+- The notebook is useful for interactive exploration and presentation.
+- The Python modules provide a more maintainable and reusable version of the workflow.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Authors
+
+- Ruth Altamirano Trujillo
+- Malena Flores Chacón
+- Odei Martinez de Morentin

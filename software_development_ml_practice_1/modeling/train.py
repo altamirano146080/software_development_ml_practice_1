@@ -1,3 +1,9 @@
+"""Model training pipeline for the impact-probability regressor.
+
+This module builds the neural network, fits it on scaled features, evaluates
+performance, and saves the trained model along with training metrics.
+"""
+
 from pathlib import Path
 
 import joblib
@@ -27,8 +33,17 @@ METRICS_PATH = REPORTS_DIR / "model_metrics.csv"
 
 
 def build_model(input_shape: int) -> tf.keras.Model:
-    """
-    Creates the neural network architecture.
+    """Create the neural network architecture.
+
+    Parameters
+    ----------
+    input_shape : int
+        Number of input features.
+
+    Returns
+    -------
+    tensorflow.keras.Model
+        A compiled neural network model.
     """
 
     model = tf.keras.Sequential(
@@ -57,10 +72,29 @@ def train_model(
     scaler_path: Path = SCALER_PATH,
     metrics_path: Path = METRICS_PATH,
 ) -> None:
-    """
-    Trains and evaluates the neural network.
-    """
+    """Train, evaluate, and save the neural network model.
 
+    The function splits the data, scales the features, trains the model,
+    calculates evaluation metrics, and saves the model and scaler.
+
+    Parameters
+    ----------
+    features_path : Path, default=FEATURES_PATH
+        Path to the input feature data.
+    labels_path : Path, default=LABELS_PATH
+        Path to the target labels.
+    model_path : Path, default=MODEL_PATH
+        Path where the trained model will be saved.
+    scaler_path : Path, default=SCALER_PATH
+        Path where the feature scaler will be saved.
+    metrics_path : Path, default=METRICS_PATH
+        Path where the evaluation metrics will be saved.
+
+    Returns
+    -------
+    None
+        Writes the trained model, scaler, and metrics to disk.
+    """
     features = pd.read_csv(features_path)
     labels = pd.read_csv(labels_path)["log_impact_probability"]
 
@@ -139,8 +173,12 @@ def train_model(
 
 @app.command()
 def main():
-    """
-    Trains and evaluates the model.
+    """Train and evaluate the model.
+
+    Returns
+    -------
+    None
+        Executes the training pipeline.
     """
 
     train_model()

@@ -1,13 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Module Reference" href="modules.html"><link rel="prev" title="Project Workflow" href="workflow.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - Software Development Oriented to Machine Learning Practice  documentation</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+        <title>Results - Software Development Oriented to Machine Learning Practice documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -172,7 +172,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -184,18 +184,18 @@
   
   <span class="sidebar-brand-text">Software Development Oriented to Machine Learning Practice  documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="#" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">Project Workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 </ul>
 
@@ -216,7 +216,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/results.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -224,30 +230,102 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="results">
+<h1>Results<a class="headerlink" href="#results" title="Link to this heading">¶</a></h1>
+<section id="model-metrics">
+<h2>Model metrics<a class="headerlink" href="#model-metrics" title="Link to this heading">¶</a></h2>
+<p>The model is evaluated using the following metrics:</p>
+<ul class="simple">
+<li><p>Mean Absolute Error.</p></li>
+<li><p>Root Mean Squared Error.</p></li>
+<li><p>R² score.</p></li>
+</ul>
+<p>The metrics are stored in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>reports/model_metrics.csv
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+</section>
+<section id="training-history">
+<h2>Training history<a class="headerlink" href="#training-history" title="Link to this heading">¶</a></h2>
+<p>The training history is stored in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>reports/training_history.csv
+</pre></div>
+</div>
+<p>This file contains information about the training and validation loss during
+the training process.</p>
+</section>
+<section id="generated-visualizations">
+<h2>Generated visualizations<a class="headerlink" href="#generated-visualizations" title="Link to this heading">¶</a></h2>
+<p>The project generates several visualizations in
+<code class="docutils literal notranslate"><span class="pre">reports/figures/</span></code>.</p>
+<section id="impact-probability-distribution">
+<h3>Impact probability distribution<a class="headerlink" href="#impact-probability-distribution" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/impact_probability_distribution.png"><img alt="Distribution of impact probability" src="_images/impact_probability_distribution.png" style="width: 700px;" />
+</a>
+</section>
+<section id="id1">
+<h3>Training history<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/training_history.png"><img alt="Training history" src="_images/training_history.png" style="width: 700px;" />
+</a>
+</section>
+<section id="predictions-versus-observations">
+<h3>Predictions versus observations<a class="headerlink" href="#predictions-versus-observations" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/predictions_vs_observations.png"><img alt="Predictions versus observations" src="_images/predictions_vs_observations.png" style="width: 700px;" />
+</a>
+</section>
+<section id="correlation-heatmap">
+<h3>Correlation heatmap<a class="headerlink" href="#correlation-heatmap" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/correlation_heatmap.png"><img alt="Correlation heatmap" src="_images/correlation_heatmap.png" style="width: 700px;" />
+</a>
+</section>
+<section id="potential-impact-timeline">
+<h3>Potential impact timeline<a class="headerlink" href="#potential-impact-timeline" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/potential_impact_timeline.png"><img alt="Potential impact timeline" src="_images/potential_impact_timeline.png" style="width: 700px;" />
+</a>
+</section>
+<section id="magnitude-versus-palermo-scale">
+<h3>Magnitude versus Palermo scale<a class="headerlink" href="#magnitude-versus-palermo-scale" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/magnitude_vs_palermo.png"><img alt="Magnitude versus Palermo scale" src="_images/magnitude_vs_palermo.png" style="width: 700px;" />
+</a>
+</section>
+<section id="velocity-versus-palermo-scale">
+<h3>Velocity versus Palermo scale<a class="headerlink" href="#velocity-versus-palermo-scale" title="Link to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="_images/velocity_vs_palermo.png"><img alt="Velocity versus Palermo scale" src="_images/velocity_vs_palermo.png" style="width: 700px;" />
+</a>
+</section>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="modules.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Module Reference</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="workflow.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Project Workflow</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -266,8 +344,38 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Results</a><ul>
+<li><a class="reference internal" href="#model-metrics">Model metrics</a></li>
+<li><a class="reference internal" href="#training-history">Training history</a></li>
+<li><a class="reference internal" href="#generated-visualizations">Generated visualizations</a><ul>
+<li><a class="reference internal" href="#impact-probability-distribution">Impact probability distribution</a></li>
+<li><a class="reference internal" href="#id1">Training history</a></li>
+<li><a class="reference internal" href="#predictions-versus-observations">Predictions versus observations</a></li>
+<li><a class="reference internal" href="#correlation-heatmap">Correlation heatmap</a></li>
+<li><a class="reference internal" href="#potential-impact-timeline">Potential impact timeline</a></li>
+<li><a class="reference internal" href="#magnitude-versus-palermo-scale">Magnitude versus Palermo scale</a></li>
+<li><a class="reference internal" href="#velocity-versus-palermo-scale">Velocity versus Palermo scale</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -276,8 +384,5 @@
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

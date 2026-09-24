@@ -1,69 +1,127 @@
-from pathlib import Path
+"""Dataset acquisition and preprocessing utilities.
 
-import numpy as np
+This module downloads the source dataset from Hugging Face, stores a local
+sample, and cleans the data before it is used in feature engineering and model
+training.
+"""
+
+from pathlib import Path
+#from dataset import download_dataset
 import pandas as pd
+import numpy as np
 import typer
 from loguru import logger
 
-from software_development_ml_practice_1.config import PROCESSED_DATA_DIR
+from software_development_ml_practice_1.config import (
+    PROCESSED_DATA_DIR,
+    RAW_DATA_DIR,
+)
+from software_development_ml_practice_1.dataset import (
+    download_dataset
+)
+
 
 app = typer.Typer()
 
-DATASET_PATH = PROCESSED_DATA_DIR / "dataset.csv"
-FEATURES_PATH = PROCESSED_DATA_DIR / "features.csv"
-LABELS_PATH = PROCESSED_DATA_DIR / "labels.csv"
+DATASET_URI = (
+    "hf://datasets/juliensimon/sentry-impact-risk/"
+    "data/sentry_impact_risk.parquet"
+)
+
+RAW_DATA_PATH = RAW_DATA_DIR / "dataset.csv"
+PROCESSED_DATA_PATH = PROCESSED_DATA_DIR / "dataset.csv"
 
 
-def create_features(
-    input_path: Path = DATASET_PATH,
-    features_path: Path = FEATURES_PATH,
-    labels_path: Path = LABELS_PATH,
-) -> tuple[pd.DataFrame, pd.Series]:
+def prepare_dataset(
+    input_path: Path = RAW_DATA_PATH,
+    output_path: Path = PROCESSED_DATA_PATH,
+) -> pd.DataFrame:
+    """Clean the raw dataset and save the processed version.
+
+    Rows containing missing values are removed before the processed dataset
+    is written to disk.
+
+    Parameters
+    ----------
+    input_path : Path, default=RAW_DATA_PATH
+        Path to the raw dataset.
+    output_path : Path, default=PROCESSED_DATA_PATH
+        Path where the cleaned dataset will be saved.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The cleaned dataset.
     """
-    Creates numerical features and the transformed target variable.
-    """
 
-    dataframe = pd.read_csv(input_path)
+    df = pd.read_csv(input_path)
 
-    dataframe = dataframe.dropna().copy()
+    original_size = len(df)
 
-    dataframe["log_impact_probability"] = np.log10(
-        dataframe["impact_probability"]
+    logger.info("Processing dataset...")
+    df_reg = df.dropna().copy()
+
+    print(f"Original dataset size: {len(df)}")
+    print(f"Dataset size after removing missing values: {len(df_reg)}")
+
+    print(f"Transforming target")
+
+    df_reg["log_impact_probability"] = np.log10(
+        df_reg["impact_probability"]
     )
 
-    numeric_columns = dataframe.select_dtypes(
-        include="number"
-    ).columns.tolist()
+    print("Selecting features")
 
-    numeric_columns.remove("impact_probability")
-    numeric_columns.remove("log_impact_probability")
+    features = df_reg.select_dtypes(include="number").columns.tolist()
 
-    features = dataframe[numeric_columns]
-    labels = dataframe["log_impact_probability"]
+    features.remove("impact_probability")
+    features.remove("log_impact_probability")
+    
+    X = df_reg[features]
+    y = df_reg["log_impact_probability"]
+    
+    print("Selected features:")
+    print(features)
+    
+    print(f"\nNumber of features: {X.shape[1]}")
 
-    features_path.parent.mkdir(parents=True, exist_ok=True)
+    logger.success("Processing dataset complete.")
 
-    features.to_csv(features_path, index=False)
-    labels.to_frame(name="log_impact_probability").to_csv(
-        labels_path,
-        index=False,
-    )
+    cleaned_size = len(df)
 
-    logger.info(f"Selected features: {numeric_columns}")
-    logger.info(f"Number of features: {features.shape[1]}")
-    logger.success(f"Features saved to {features_path}")
-    logger.success(f"Labels saved to {labels_path}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_path, index=False)
 
-    return features, labels
+    logger.info(f"Original dataset size: {original_size}")
+    logger.info(f"Cleaned dataset size: {cleaned_size}")
+    logger.success(f"Processed dataset saved to {output_path}")
+
+    return df
 
 
 @app.command()
-def main():
-    """
-    Generates the feature and label files.
+def main(
+    force_download: bool = typer.Option(
+        False,
+        help="Download the dataset again even if a local copy exists.",
+    ),
+):
+    """Download and prepare the asteroid impact-risk dataset.
+
+    Parameters
+    ----------
+    force_download : bool, default=False
+        If True, redownload the source dataset even when a local copy already
+        exists.
+
+    Returns
+    -------
+    None
+        This command runs the data acquisition and preprocessing pipeline.
     """
 
-    create_features()
+    download_dataset(force_download=force_download)
+    prepare_dataset()
 
 
 if __name__ == "__main__":

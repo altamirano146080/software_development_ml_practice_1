@@ -1,19 +1,59 @@
-.. Software Development Oriented to Machine Learning Practice documentation master file, created by
-   sphinx-quickstart on Wed Sep 16 12:41:02 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Software Development Oriented to Machine Learning Practice
+==========================================================
 
-Software Development Oriented to Machine Learning Practice documentation
-========================================================================
+This project focuses on the analysis of asteroid impact risk using machine
+learning techniques.
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+The project includes:
 
-.. automodule:: dataset
-    :members:
+* Dataset downloading and preparation.
+* Data cleaning and transformation.
+* Feature creation.
+* Exploratory data analysis.
+* Neural network training.
+* Model evaluation.
+* Impact probability predictions.
+* Visualization and reporting.
+
+Project workflow
+----------------
+
+The complete project follows this workflow:
+
+.. code-block:: text
+
+   Dataset from Hugging Face
+              |
+              v
+   Dataset downloading and cleaning
+              |
+              v
+   Feature creation
+              |
+              v
+   Neural network training
+              |
+              v
+   Model evaluation
+              |
+              v
+   Impact probability predictions
+
+Project outputs
+---------------
+
+The trained models are stored in ``models/``.
+
+The metrics, training history, and visualizations are stored in ``reports/``.
+
+To install and run the project, see :doc:`installation`.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   installation
+   usage
+   workflow
+   results
+   modules

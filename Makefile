@@ -15,7 +15,6 @@ PYTHON_INTERPRETER = python
 .PHONY: requirements
 requirements:
 	uv sync
-	
 
 
 
@@ -97,6 +96,12 @@ pipeline: data features plots train predict
 .PHONY: notebook
 notebook: requirements
 	uv run --with jupyter jupyter lab
+
+## Build the documentation in HTML format
+.PHONY: docs-html
+docs-html:
+	$(MAKE) -C docs html
+
 
 #################################################################################
 # Self Documenting Commands                                                     #
