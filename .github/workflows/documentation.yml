@@ -7,7 +7,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# OBLIGATORIO: Otorga permisos de escritura para crear/actualizar la rama gh-pages
 permissions:
   contents: write
 
@@ -21,14 +20,18 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install dependencies and local package
         run: |
           python -m pip install --upgrade pip
+          # Instalamos las dependencias base de Sphinx
           pip install sphinx sphinx_rtd_theme myst_parser
+          # Instalamos tu proyecto en modo editable para que Sphinx reconozca tu paquete
+          pip install -e .
 
       - name: Sphinx build
         run: |
-          sphinx-build doc _build
+          # Se cambió 'doc' por 'docs' para que coincida con tu carpeta
+          sphinx-build docs _build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
