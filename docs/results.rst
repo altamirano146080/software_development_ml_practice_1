@@ -29,7 +29,7 @@ This file contains information about the training and validation loss during
 the training process.
 
 Generated visualizations
------------------------
+------------------------
 
 The project generates several visualizations in
 ``reports/figures/``.
@@ -77,7 +77,7 @@ Magnitude versus Palermo scale
    :width: 700px
 
 Velocity versus Palermo scale
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: ../reports/figures/velocity_vs_palermo.png
    :alt: Velocity versus Palermo scale

@@ -37,7 +37,7 @@ The target variable is transformed using a base-10 logarithm:
 
 .. math::
 
-   y = \log_{10}(\text{impact_probability})
+   y = \log_{10}\left(\text{impact\_probability}\right)
 
 All numerical columns are selected as model features except:
 

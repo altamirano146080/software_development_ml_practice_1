@@ -6,7 +6,7 @@ training.
 """
 
 from pathlib import Path
-from dataset import download_dataset
+#from dataset import download_dataset
 import pandas as pd
 import numpy as np
 import typer
@@ -16,6 +16,10 @@ from software_development_ml_practice_1.config import (
     PROCESSED_DATA_DIR,
     RAW_DATA_DIR,
 )
+from software_development_ml_practice_1.dataset import (
+    download_dataset
+)
+
 
 app = typer.Typer()
 

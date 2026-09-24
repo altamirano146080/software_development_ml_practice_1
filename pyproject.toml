@@ -7,7 +7,9 @@ name = "software_development_ml_practice_1"
 version = "0.0.1"
 description = "Machine learning project focused on data exploration, model training, visualization, and performance evaluation."
 authors = [
-  { name = "Ruth Altamirano, Malena Chac\u00f3n, Odei Martinez de Morentin" },
+  { name = "Ruth Altamirano" },
+  { name = "Malena Chacón" },
+  { name = "Odei Martinez de Morentin" }
 ]
 
 readme = "README.md"
