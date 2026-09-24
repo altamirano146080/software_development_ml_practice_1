@@ -1,187 +1,96 @@
-"""Model training pipeline for the impact-probability regressor.
+"""Prediction pipeline for the trained impact-probability model.
 
-This module builds the neural network, fits it on scaled features, evaluates
-performance, and saves the trained model along with training metrics.
+This module loads the saved model and scaler, transforms new feature values,
+and writes impact probability predictions to disk.
 """
 
 from pathlib import Path
 
 import joblib
-import numpy as np
 import pandas as pd
 import tensorflow as tf
 import typer
 from loguru import logger
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
 from software_development_ml_practice_1.config import (
     MODELS_DIR,
     PROCESSED_DATA_DIR,
-    REPORTS_DIR,
 )
 
 app = typer.Typer()
 
 FEATURES_PATH = PROCESSED_DATA_DIR / "features.csv"
-LABELS_PATH = PROCESSED_DATA_DIR / "labels.csv"
-
 MODEL_PATH = MODELS_DIR / "impact_probability_model.keras"
 SCALER_PATH = MODELS_DIR / "feature_scaler.joblib"
-METRICS_PATH = REPORTS_DIR / "model_metrics.csv"
+PREDICTIONS_PATH = PROCESSED_DATA_DIR / "predictions.csv"
 
 
-def build_model(input_shape: int) -> tf.keras.Model:
-    """Create the neural network architecture.
-
-    Parameters
-    ----------
-    input_shape : int
-        Number of input features.
-
-    Returns
-    -------
-    tensorflow.keras.Model
-        A compiled neural network model.
-    """
-
-    model = tf.keras.Sequential(
-        [
-            tf.keras.layers.Input(shape=(input_shape,)),
-            tf.keras.layers.Dense(64, activation="relu"),
-            tf.keras.layers.Dense(32, activation="relu"),
-            tf.keras.layers.Dense(16, activation="relu"),
-            tf.keras.layers.Dense(1),
-        ]
-    )
-
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
-        loss="mse",
-        metrics=["mae"],
-    )
-
-    return model
-
-
-def train_model(
+def predict(
     features_path: Path = FEATURES_PATH,
-    labels_path: Path = LABELS_PATH,
     model_path: Path = MODEL_PATH,
     scaler_path: Path = SCALER_PATH,
-    metrics_path: Path = METRICS_PATH,
-) -> None:
-    """Train, evaluate, and save the neural network model.
+    predictions_path: Path = PREDICTIONS_PATH,
+) -> pd.DataFrame:
+    """Generate impact probability predictions.
 
-    The function splits the data, scales the features, trains the model,
-    calculates evaluation metrics, and saves the model and scaler.
+    The trained model and feature scaler are loaded from disk. The input
+    features are scaled before being passed to the model.
 
     Parameters
     ----------
     features_path : Path, default=FEATURES_PATH
-        Path to the input feature data.
-    labels_path : Path, default=LABELS_PATH
-        Path to the target labels.
+        Path to the processed feature data.
     model_path : Path, default=MODEL_PATH
-        Path where the trained model will be saved.
+        Path to the trained Keras model.
     scaler_path : Path, default=SCALER_PATH
-        Path where the feature scaler will be saved.
-    metrics_path : Path, default=METRICS_PATH
-        Path where the evaluation metrics will be saved.
+        Path to the saved feature scaler.
+    predictions_path : Path, default=PREDICTIONS_PATH
+        Path where predictions will be saved.
 
     Returns
     -------
-    None
-        Writes the trained model, scaler, and metrics to disk.
+    pandas.DataFrame
+        A dataframe containing logarithmic and original-scale predictions.
     """
+
     features = pd.read_csv(features_path)
-    labels = pd.read_csv(labels_path)["log_impact_probability"]
 
-    x_train, x_test, y_train, y_test = train_test_split(
-        features,
-        labels,
-        test_size=0.2,
-        random_state=42,
-    )
+    model = tf.keras.models.load_model(model_path)
+    scaler = joblib.load(scaler_path)
 
-    scaler = StandardScaler()
+    features_scaled = scaler.transform(features)
 
-    x_train_scaled = scaler.fit_transform(x_train)
-    x_test_scaled = scaler.transform(x_test)
-
-    model = build_model(input_shape=x_train_scaled.shape[1])
-
-    history = model.fit(
-        x_train_scaled,
-        y_train,
-        validation_split=0.2,
-        epochs=100,
-        batch_size=32,
-        verbose=1,
-        callbacks=[
-            tf.keras.callbacks.EarlyStopping(
-                monitor="val_loss",
-                patience=15,
-                restore_best_weights=True,
-            )
-        ],
-    )
-
-    predictions = model.predict(
-        x_test_scaled,
+    log_predictions = model.predict(
+        features_scaled,
         verbose=0,
     ).ravel()
 
-    mae = mean_absolute_error(y_test, predictions)
-    rmse = np.sqrt(mean_squared_error(y_test, predictions))
-    r2 = r2_score(y_test, predictions)
-
-    model_path.parent.mkdir(parents=True, exist_ok=True)
-    scaler_path.parent.mkdir(parents=True, exist_ok=True)
-    metrics_path.parent.mkdir(parents=True, exist_ok=True)
-
-    model.save(model_path)
-    joblib.dump(scaler, scaler_path)
-
-    metrics = pd.DataFrame(
-        [
-            {
-                "MAE": mae,
-                "RMSE": rmse,
-                "R2": r2,
-            }
-        ]
+    predictions = pd.DataFrame(
+        {
+            "log_impact_probability_prediction": log_predictions,
+            "impact_probability_prediction": 10**log_predictions,
+        }
     )
 
-    metrics.to_csv(metrics_path, index=False)
+    predictions_path.parent.mkdir(parents=True, exist_ok=True)
+    predictions.to_csv(predictions_path, index=False)
 
-    history_dataframe = pd.DataFrame(history.history)
-    history_dataframe.to_csv(
-        REPORTS_DIR / "training_history.csv",
-        index=False,
-    )
+    logger.success(f"Predictions saved to {predictions_path}")
 
-    logger.info(f"MAE: {mae:.4f}")
-    logger.info(f"RMSE: {rmse:.4f}")
-    logger.info(f"R2: {r2:.4f}")
-
-    logger.success(f"Model saved to {model_path}")
-    logger.success(f"Scaler saved to {scaler_path}")
-    logger.success(f"Metrics saved to {metrics_path}")
+    return predictions
 
 
 @app.command()
 def main():
-    """Train and evaluate the model.
+    """Generate predictions for the processed features.
 
     Returns
     -------
     None
-        Executes the training pipeline.
+        Executes the prediction pipeline.
     """
 
-    train_model()
+    predict()
 
 
 if __name__ == "__main__":
