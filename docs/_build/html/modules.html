@@ -299,25 +299,114 @@ is written to disk.</p>
 </section>
 <section id="module-software_development_ml_practice_1.features">
 <span id="features"></span><h2>Features<a class="headerlink" href="#module-software_development_ml_practice_1.features" title="Link to this heading">¶</a></h2>
+<p>Dataset acquisition and preprocessing utilities.</p>
+<p>This module downloads the source dataset from Hugging Face, stores a local
+sample, and cleans the data before it is used in feature engineering and model
+training.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.features.create_features">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.features.</span></span><span class="sig-name descname"><span class="pre">create_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/dataset.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/features.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/labels.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Series</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#software_development_ml_practice_1.features.create_features" title="Link to this definition">¶</a></dt>
-<dd><p>Create model features and the transformed target variable.</p>
-<p>Missing rows are removed and the impact probability is transformed using
-a base-10 logarithm. Numerical columns are used as model features.</p>
+<dt class="sig sig-object py" id="software_development_ml_practice_1.features.download_dataset">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.features.</span></span><span class="sig-name descname"><span class="pre">download_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/raw/dataset.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.features.download_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Download a sample of the asteroid impact-risk dataset.</p>
+<p>The dataset is downloaded from Hugging Face and stored locally as a CSV
+file. If the file already exists, the local copy is reused unless
+<code class="docutils literal notranslate"><span class="pre">force_download</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <dl class="simple">
-<dt>input_path:</dt><dd><p>Path to the processed dataset.</p>
+<dt>output_path<span class="classifier">Path, default=RAW_DATA_PATH</span></dt><dd><p>Path where the downloaded dataset will be saved.</p>
 </dd>
-<dt>features_path:</dt><dd><p>Path where the feature data will be saved.</p>
+<dt>sample_size<span class="classifier">int, default=500</span></dt><dd><p>Maximum number of rows to keep in the local sample.</p>
 </dd>
-<dt>labels_path:</dt><dd><p>Path where the target labels will be saved.</p>
+<dt>force_download<span class="classifier">bool, default=False</span></dt><dd><p>Whether to download the dataset again if a local copy exists.</p>
 </dd>
 </dl>
 </section>
 <section id="id4">
 <h3>Returns<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame</dt><dd><p>The downloaded dataset.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="software_development_ml_practice_1.features.main">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.features.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.features.main" title="Link to this definition">¶</a></dt>
+<dd><p>Download and prepare the asteroid impact-risk dataset.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>force_download<span class="classifier">bool, default=False</span></dt><dd><p>If True, redownload the source dataset even when a local copy already
+exists.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>This command runs the data acquisition and preprocessing pipeline.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="software_development_ml_practice_1.features.prepare_dataset">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.features.</span></span><span class="sig-name descname"><span class="pre">prepare_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/raw/dataset.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/dataset.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.features.prepare_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Clean the raw dataset and save the processed version.</p>
+<p>Rows containing missing values are removed before the processed dataset
+is written to disk.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>input_path<span class="classifier">Path, default=RAW_DATA_PATH</span></dt><dd><p>Path to the raw dataset.</p>
+</dd>
+<dt>output_path<span class="classifier">Path, default=PROCESSED_DATA_PATH</span></dt><dd><p>Path where the cleaned dataset will be saved.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame</dt><dd><p>The cleaned dataset.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-software_development_ml_practice_1.config">
+<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#module-software_development_ml_practice_1.config" title="Link to this heading">¶</a></h2>
+<p>Configuration settings for the asteroid impact-risk project.</p>
+<p>This module defines the project root and the locations used for raw data,
+processed data, models, and generated reports. It also ensures the required
+folders exist when the package is imported.</p>
+</section>
+<section id="module-software_development_ml_practice_1.plots">
+<span id="plots"></span><h2>Plots<a class="headerlink" href="#module-software_development_ml_practice_1.plots" title="Link to this heading">¶</a></h2>
+<p>Feature engineering utilities for the asteroid impact-risk model.</p>
+<p>The module creates the feature matrix and transformed target variable used to
+train the regression model.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="software_development_ml_practice_1.plots.create_features">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.plots.</span></span><span class="sig-name descname"><span class="pre">create_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/dataset.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/features.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/labels.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Series</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#software_development_ml_practice_1.plots.create_features" title="Link to this definition">¶</a></dt>
+<dd><p>Create model features and the transformed target variable.</p>
+<p>Missing rows are removed and the impact probability is transformed using
+a base-10 logarithm. Numerical columns are used as model features.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>input_path<span class="classifier">Path, default=DATASET_PATH</span></dt><dd><p>Path to the processed dataset.</p>
+</dd>
+<dt>features_path<span class="classifier">Path, default=FEATURES_PATH</span></dt><dd><p>Path where the feature data will be saved.</p>
+</dd>
+<dt>labels_path<span class="classifier">Path, default=LABELS_PATH</span></dt><dd><p>Path where the target labels will be saved.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>tuple[pandas.DataFrame, pandas.Series]</dt><dd><p>The feature matrix and transformed target variable.</p>
 </dd>
@@ -326,45 +415,41 @@ a base-10 logarithm. Numerical columns are used as model features.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.features.main">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.features.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.features.main" title="Link to this definition">¶</a></dt>
-<dd><p>Generates the feature and label files.</p>
-</dd></dl>
-
-</section>
-<section id="module-software_development_ml_practice_1.config">
-<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#module-software_development_ml_practice_1.config" title="Link to this heading">¶</a></h2>
-</section>
-<section id="module-software_development_ml_practice_1.plots">
-<span id="plots"></span><h2>Plots<a class="headerlink" href="#module-software_development_ml_practice_1.plots" title="Link to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.plots.create_plots">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.plots.</span></span><span class="sig-name descname"><span class="pre">create_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/dataset.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/reports/figures')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.plots.create_plots" title="Link to this definition">¶</a></dt>
-<dd><p>Creates exploratory data analysis plots.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="software_development_ml_practice_1.plots.main">
 <span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.plots.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.plots.main" title="Link to this definition">¶</a></dt>
-<dd><p>Generates all exploratory data analysis plots.</p>
+<dd><p>Generate the feature and label files.</p>
+<section id="id11">
+<h3>Returns<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Executes the feature creation pipeline.</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 </section>
 <section id="module-software_development_ml_practice_1.modeling.train">
 <span id="model-training"></span><h2>Model training<a class="headerlink" href="#module-software_development_ml_practice_1.modeling.train" title="Link to this heading">¶</a></h2>
+<p>Modeling package for training and inference utilities.</p>
+</section>
+<section id="module-software_development_ml_practice_1.modeling.predict">
+<span id="model-prediction"></span><h2>Model prediction<a class="headerlink" href="#module-software_development_ml_practice_1.modeling.predict" title="Link to this heading">¶</a></h2>
+<p>Model training pipeline for the impact-probability regressor.</p>
+<p>This module builds the neural network, fits it on scaled features, evaluates
+performance, and saves the trained model along with training metrics.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.train.build_model">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.train.</span></span><span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Model</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.modeling.train.build_model" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.predict.build_model">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.predict.</span></span><span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Model</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.modeling.predict.build_model" title="Link to this definition">¶</a></dt>
 <dd><p>Create the neural network architecture.</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <dl class="simple">
-<dt>input_shape:</dt><dd><p>Number of input features.</p>
+<dt>input_shape<span class="classifier">int</span></dt><dd><p>Number of input features.</p>
 </dd>
 </dl>
 </section>
-<section id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>tensorflow.keras.Model</dt><dd><p>A compiled neural network model.</p>
 </dd>
@@ -373,66 +458,43 @@ a base-10 logarithm. Numerical columns are used as model features.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.train.main">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.train.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.modeling.train.main" title="Link to this definition">¶</a></dt>
-<dd><p>Trains and evaluates the model.</p>
+<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.predict.main">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.predict.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.modeling.predict.main" title="Link to this definition">¶</a></dt>
+<dd><p>Train and evaluate the model.</p>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Executes the training pipeline.</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.train.train_model">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.train.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/features.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/labels.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/impact_probability_model.keras')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/feature_scaler.joblib')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/reports/model_metrics.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.modeling.train.train_model" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.predict.train_model">
+<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.predict.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/features.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/labels.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/impact_probability_model.keras')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/feature_scaler.joblib')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/reports/model_metrics.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.modeling.predict.train_model" title="Link to this definition">¶</a></dt>
 <dd><p>Train, evaluate, and save the neural network model.</p>
 <p>The function splits the data, scales the features, trains the model,
 calculates evaluation metrics, and saves the model and scaler.</p>
-<section id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
 <dl class="simple">
-<dt>features_path:</dt><dd><p>Path to the input feature data.</p>
+<dt>features_path<span class="classifier">Path, default=FEATURES_PATH</span></dt><dd><p>Path to the input feature data.</p>
 </dd>
-<dt>labels_path:</dt><dd><p>Path to the target labels.</p>
+<dt>labels_path<span class="classifier">Path, default=LABELS_PATH</span></dt><dd><p>Path to the target labels.</p>
 </dd>
-<dt>model_path:</dt><dd><p>Path where the trained model will be saved.</p>
+<dt>model_path<span class="classifier">Path, default=MODEL_PATH</span></dt><dd><p>Path where the trained model will be saved.</p>
 </dd>
-<dt>scaler_path:</dt><dd><p>Path where the feature scaler will be saved.</p>
+<dt>scaler_path<span class="classifier">Path, default=SCALER_PATH</span></dt><dd><p>Path where the feature scaler will be saved.</p>
 </dd>
-<dt>metrics_path:</dt><dd><p>Path where the evaluation metrics will be saved.</p>
+<dt>metrics_path<span class="classifier">Path, default=METRICS_PATH</span></dt><dd><p>Path where the evaluation metrics will be saved.</p>
 </dd>
 </dl>
 </section>
-</dd></dl>
-
-</section>
-<section id="module-software_development_ml_practice_1.modeling.predict">
-<span id="model-prediction"></span><h2>Model prediction<a class="headerlink" href="#module-software_development_ml_practice_1.modeling.predict" title="Link to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.predict.main">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.predict.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#software_development_ml_practice_1.modeling.predict.main" title="Link to this definition">¶</a></dt>
-<dd><p>Generates predictions for the processed features.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="software_development_ml_practice_1.modeling.predict.predict">
-<span class="sig-prename descclassname"><span class="pre">software_development_ml_practice_1.modeling.predict.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/features.csv')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/impact_probability_model.keras')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/models/feature_scaler.joblib')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/alumno/Desktop/soml_practice1/data/processed/predictions.csv')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#software_development_ml_practice_1.modeling.predict.predict" title="Link to this definition">¶</a></dt>
-<dd><p>Generate impact probability predictions.</p>
-<p>The trained model and feature scaler are loaded from disk. The input
-features are scaled before being passed to the model.</p>
-<section id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
 <dl class="simple">
-<dt>features_path:</dt><dd><p>Path to the processed feature data.</p>
-</dd>
-<dt>model_path:</dt><dd><p>Path to the trained Keras model.</p>
-</dd>
-<dt>scaler_path:</dt><dd><p>Path to the saved feature scaler.</p>
-</dd>
-<dt>predictions_path:</dt><dd><p>Path where predictions will be saved.</p>
-</dd>
-</dl>
-</section>
-<section id="id9">
-<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
-<dl class="simple">
-<dt>pandas.DataFrame</dt><dd><p>A dataframe containing logarithmic and original-scale predictions.</p>
+<dt>None</dt><dd><p>Writes the trained model, scaler, and metrics to disk.</p>
 </dd>
 </dl>
 </section>
@@ -496,25 +558,22 @@ features are scaled before being passed to the model.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-software_development_ml_practice_1.features">Features</a><ul>
-<li><a class="reference internal" href="#software_development_ml_practice_1.features.create_features"><code class="docutils literal notranslate"><span class="pre">create_features()</span></code></a></li>
+<li><a class="reference internal" href="#software_development_ml_practice_1.features.download_dataset"><code class="docutils literal notranslate"><span class="pre">download_dataset()</span></code></a></li>
 <li><a class="reference internal" href="#software_development_ml_practice_1.features.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li><a class="reference internal" href="#software_development_ml_practice_1.features.prepare_dataset"><code class="docutils literal notranslate"><span class="pre">prepare_dataset()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-software_development_ml_practice_1.config">Configuration</a></li>
 <li><a class="reference internal" href="#module-software_development_ml_practice_1.plots">Plots</a><ul>
-<li><a class="reference internal" href="#software_development_ml_practice_1.plots.create_plots"><code class="docutils literal notranslate"><span class="pre">create_plots()</span></code></a></li>
+<li><a class="reference internal" href="#software_development_ml_practice_1.plots.create_features"><code class="docutils literal notranslate"><span class="pre">create_features()</span></code></a></li>
 <li><a class="reference internal" href="#software_development_ml_practice_1.plots.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-software_development_ml_practice_1.modeling.train">Model training</a><ul>
-<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.train.build_model"><code class="docutils literal notranslate"><span class="pre">build_model()</span></code></a></li>
-<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.train.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.train.train_model"><code class="docutils literal notranslate"><span class="pre">train_model()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-software_development_ml_practice_1.modeling.train">Model training</a></li>
 <li><a class="reference internal" href="#module-software_development_ml_practice_1.modeling.predict">Model prediction</a><ul>
+<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.predict.build_model"><code class="docutils literal notranslate"><span class="pre">build_model()</span></code></a></li>
 <li><a class="reference internal" href="#software_development_ml_practice_1.modeling.predict.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.predict.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+<li><a class="reference internal" href="#software_development_ml_practice_1.modeling.predict.train_model"><code class="docutils literal notranslate"><span class="pre">train_model()</span></code></a></li>
 </ul>
 </li>
 </ul>

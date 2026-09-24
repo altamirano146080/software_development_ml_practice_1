@@ -1,4 +1,9 @@
 {
-    ".ipynb_checkpoints/index-checkpoint": 0.02,
-    ".ipynb_checkpoints/results-checkpoint": 0.014
+    ".ipynb_checkpoints/workflow-checkpoint": 0.026,
+    "index": 0.005,
+    "installation": 0.008,
+    "modules": 3.593,
+    "results": 0.012,
+    "usage": 0.008,
+    "workflow": 0.011
 }
